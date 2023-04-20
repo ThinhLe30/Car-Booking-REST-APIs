@@ -1,15 +1,21 @@
 package com.brooklyn.xeke.service;
 
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.brooklyn.xeke.entity.BookingDetail;
 import com.brooklyn.xeke.exception.ResourceNotFoundException;
 import com.brooklyn.xeke.payload.BookingDetailDTO;
+import com.brooklyn.xeke.payload.BookingDetailResponse;
 import com.brooklyn.xeke.repository.BookingDetailRepository;
 import com.brooklyn.xeke.repository.TripRepository;
 
@@ -27,9 +33,26 @@ public class BookingDetailService {
 		return mapper.map(bookingDetailRepository.save(detail),BookingDetailDTO.class);
 	}
 	
-	public List<BookingDetailDTO> findAll() {
-		List<BookingDetail> details = bookingDetailRepository.findAllByOrderByDateBookingDesc();
-		return details.stream().map(detail -> mapper.map(detail, BookingDetailDTO.class)).collect(Collectors.toList());
+	public BookingDetailResponse findAll(int pageNo, int pageSize, String sortField, String orderBy) {
+		Sort sort = orderBy.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+		Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+		Page<BookingDetail> details = bookingDetailRepository.findAll(pageable);
+		List<BookingDetail> listOfDetails = details.getContent();
+		
+		List<BookingDetailDTO> content = listOfDetails.stream().map(detail -> mapper.map(detail,BookingDetailDTO.class )).collect(Collectors.toList());
+		BookingDetailResponse response = new BookingDetailResponse();
+		response.setContent(content);
+		response.setPageNo(pageNo);
+		response.setPageSize(pageSize);
+		response.setTotalElements(details.getTotalElements());
+		response.setTotalPages(details.getTotalPages());
+		response.setLast(details.isLast());
+		response.setSortField(sortField);
+		response.setOrderBy(orderBy);
+		String reverseOrderBy = orderBy.equalsIgnoreCase(Sort.Direction.ASC.name()) ? "desc" : "asc";
+		response.setReverseOrderBy(reverseOrderBy);
+
+		return response;
 	}
 	public BookingDetailDTO getBookingDetail(Integer id) {
 		BookingDetail detail = bookingDetailRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Booking Detail", "id", String.valueOf(id)));
