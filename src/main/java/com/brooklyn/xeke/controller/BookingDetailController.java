@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.brooklyn.xeke.payload.AppConstrant;
 import com.brooklyn.xeke.payload.BookingDetailDTO;
-import com.brooklyn.xeke.payload.DriverDTO;
+import com.brooklyn.xeke.payload.BookingDetailResponse;
 import com.brooklyn.xeke.service.BookingDetailService;
 
 import jakarta.validation.Valid;
@@ -27,8 +29,13 @@ public class BookingDetailController {
 	private BookingDetailService detailService;
 	
 	@GetMapping("/booking-details")
-	public List<BookingDetailDTO> findAll(){
-		return detailService.findAll();
+	public BookingDetailResponse findAll(
+			@RequestParam(value = "pageNo", defaultValue = AppConstrant.BOOKING_DETAIL_DEFAULT_PAGE_NUMBER,required = false) int pageNo,
+			@RequestParam(value = "pageSize", defaultValue = AppConstrant.BOOKING_DETAIL_DEFAULT_PAGE_SIZE,required = false) int pageSize,
+			@RequestParam(value = "sortField", defaultValue = AppConstrant.BOOKING_DETAIL_DEFAULT_SORT_FIELD,required = false) String sortField,
+			@RequestParam(value = "orderBy", defaultValue = AppConstrant.BOOKING_DETAIL_DEFAULT_ORDER_BY,required = false) String orderBy	
+			){
+		return detailService.findAll(pageNo, pageSize, sortField, orderBy);
 	}
 	
 	@GetMapping("/booking-details/{id}")
