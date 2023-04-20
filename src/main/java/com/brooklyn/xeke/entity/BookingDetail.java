@@ -1,5 +1,7 @@
 package com.brooklyn.xeke.entity;
 
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -31,6 +33,8 @@ public class BookingDetail {
 	@Enumerated(EnumType.STRING)
 	private Sheet sheet;
 	private boolean status;
+	@Column(name = "date_booking")
+	private Date dateBooking;
 	
 	@ManyToOne
 	@JoinColumn(name = "trip_id")
@@ -38,6 +42,12 @@ public class BookingDetail {
 	
 	
 	
+	public Date getDateBooking() {
+		return dateBooking;
+	}
+	public void setDateBooking(Date dateBooking) {
+		this.dateBooking = dateBooking;
+	}
 	public Trip getTrip() {
 		return trip;
 	}

@@ -1,5 +1,7 @@
 package com.brooklyn.xeke.bookingdetails;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
@@ -39,5 +41,13 @@ public class TestBookingDetailsRepository {
 			detail.setTrip(tripRepository.findById(new Random().nextInt(30)+1).get());
 			bookingDetailRepository.save(detail);
 		});
+	}
+	@Test
+	public void setDate() {
+		List<BookingDetail> findAll = bookingDetailRepository.findAll();
+		for(BookingDetail booking : findAll) {
+			booking.setDateBooking(new Date());
+			bookingDetailRepository.save(booking);
+		}
 	}
 }
