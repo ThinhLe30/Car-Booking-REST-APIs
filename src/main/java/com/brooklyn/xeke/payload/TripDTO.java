@@ -1,9 +1,8 @@
 package com.brooklyn.xeke.payload;
 
 import java.util.Date;
-
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class TripDTO {
@@ -11,9 +10,25 @@ public class TripDTO {
 	private Date startTime;
 	private Date endTime;
 	private Integer driverId;
+	private Set<BookingDetailDTO> bookingDetails = new HashSet<>();
+	
+	
+	
+	public Set<BookingDetailDTO> getBookingDetails() {
+		return bookingDetails;
+	}
+
+
+	public void setBookingDetails(Set<BookingDetailDTO> bookingDetails) {
+		this.bookingDetails = bookingDetails;
+	}
+
+
 	public Integer getId() {
 		return id;
 	}
+	
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -35,6 +50,12 @@ public class TripDTO {
 	public void setDriverId(Integer driverId) {
 		this.driverId = driverId;
 	}
+
+
+	public TripDTO() {
+		super();
+	}
+	
 	
 	
 }
