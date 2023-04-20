@@ -1,14 +1,44 @@
 package com.brooklyn.xeke.payload;
 
+import java.util.Date;
+
 import com.brooklyn.xeke.entity.Sheet;
+
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 public class BookingDetailDTO {
 	private Integer id;
+	@NotEmpty
+	@Size(min = 2, message = "Booking first name should have at least 2 characters")
 	private String firstName;
+	@NotEmpty
+	@Size(min = 2, message = "Booking last name should have at least 2 characters")
 	private String lastName;
+	@NotEmpty
+	@Size(min = 5, message = "Booking pick destination should have at least 5 characters")
 	private String pickDestination;
+	@NotEmpty
+	@Size(min = 5, message = "Booking drop destination should have at least 5 characters")
 	private String dropDestination;
+	@NotEmpty
 	private String phone;
 	private Sheet sheet;
+	private Date dateBooking;
+	
+	public Date getDateBooking() {
+		return dateBooking;
+	}
+	public void setDateBooking(Date dateBooking) {
+		this.dateBooking = dateBooking;
+	}
+	private Integer tripId;
+	
+	public Integer getTripId() {
+		return tripId;
+	}
+	public void setTripId(Integer tripId) {
+		this.tripId = tripId;
+	}
 	private boolean status;
 	public Integer getId() {
 		return id;
